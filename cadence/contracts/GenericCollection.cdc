@@ -38,7 +38,10 @@ pub contract GenericCollection {
         }
 
         pub fun addCollection(collection: @AnyResource{NonFungibleToken.CollectionPublic}) {
-          if GenericCollection.allowList[collection.getType()] != nil && GenericCollection.allowList[collection.getType()]!{
+            pre {
+                GenericCollection.allowList[collection.getType()]! == true: "not in allow list"
+            }
+
             let collectionType = collection.getType()
             let existingCollection <- self.collections.insert(key:collectionType,  <-collection)
             emit CollectionAdded(collectionType: collectionType)
@@ -46,9 +49,6 @@ pub contract GenericCollection {
               panic("collection exists")
             }
             destroy existingCollection
-          }else {
-            panic("not allowed to insert collection")
-          }
         }
 
         destroy() {
