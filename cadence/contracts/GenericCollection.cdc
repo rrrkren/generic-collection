@@ -1,7 +1,7 @@
 import NonFungibleToken from "./shared/NonFungibleToken.cdc"
 pub contract GenericCollection {
 
-  pub let allowList: {Type: Bool}
+  priv let allowList: {Type: Bool}
   pub event CollectionAdded(collectionType: Type)
 
     pub resource interface PubCollection {
