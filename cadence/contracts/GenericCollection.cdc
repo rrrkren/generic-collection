@@ -12,19 +12,14 @@ pub contract GenericCollection {
     // The definition of the Collection resource that
     // holds the NFTs that a user owns
     pub resource Collection: PubCollection {
-        // dictionary of NFT conforming tokens
-        // NFT is a resource type with an `UInt64` ID field
         pub var collections: @{Type: AnyResource{NonFungibleToken.CollectionPublic}}
 
-        // Initialize the NFTs field to an empty collection
         init () {
             self.collections <- {}
         }
 
         pub fun withdrawCollection(collectionType: Type): @AnyResource {
-            // If the NFT isn't found, the transaction panics and reverts
             let token <- self.collections.remove(key: collectionType)!
-
             return <-token
         }
 

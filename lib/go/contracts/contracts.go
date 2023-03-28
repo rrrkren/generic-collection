@@ -10,6 +10,7 @@ import (
 
 const (
 	filenameGenericCollection = "GenericCollection.cdc"
+	filenameAccountController = "AccountController.cdc"
 
 	EmulatorFlowTokenAddress        = "0x0ae53cb6e3f42a79"
 	EmulatorFungibleTokenAddress    = "0xee82856bf20e2aa6"
@@ -18,6 +19,7 @@ const (
 
 var (
 	placeHolderNonFungibleToken = regexp.MustCompile(`".*/NonFungibleToken.cdc"`)
+	placeHolderExampleToken     = regexp.MustCompile(`".*/ExampleNFT.cdc"`)
 )
 
 func withHexPrefix(address string) string {
@@ -36,6 +38,14 @@ func GenericCollection(nftAddr string) []byte {
 	code := assets.MustAssetString(filenameGenericCollection)
 
 	code = placeHolderNonFungibleToken.ReplaceAllString(code, withHexPrefix(nftAddr))
+
+	return []byte(code)
+}
+
+func AccountController(nftAddr, exampleTokenAddr string) []byte {
+	code := assets.MustAssetString(filenameAccountController)
+	code = placeHolderNonFungibleToken.ReplaceAllString(code, withHexPrefix(nftAddr))
+	code = placeHolderExampleToken.ReplaceAllString(code, withHexPrefix(exampleTokenAddr))
 
 	return []byte(code)
 }

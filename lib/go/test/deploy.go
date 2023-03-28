@@ -35,6 +35,30 @@ func deployGenericCollectionContract(
 	return contractAddress
 }
 
+func deployAccountControllerContract(
+	t *testing.T,
+	b *emulator.Blockchain,
+	key []*flow.AccountKey,
+	signer crypto.Signer,
+	nftAddr flow.Address,
+	exampleTokenAddr flow.Address,
+) flow.Address {
+
+	contractCode := contracts.AccountController(nftAddr.String(), exampleTokenAddr.String())
+	contractAddress, err := b.CreateAccount(key, []sdktemplates.Contract{
+		{
+			Name:   "AccountController",
+			Source: string(contractCode),
+		},
+	})
+	require.NoError(t, err)
+
+	_, err = b.CommitBlock()
+	require.NoError(t, err)
+
+	return contractAddress
+}
+
 func deployNFTContracts(
 	t *testing.T,
 	b *emulator.Blockchain,
