@@ -9,8 +9,9 @@ import (
 //go:generate go run github.com/kevinburke/go-bindata/go-bindata -prefix ../../../cadence/contracts -o internal/assets/assets.go -pkg assets -nometadata -nomemcopy ../../../cadence/contracts/...
 
 const (
-	filenameGenericCollection = "GenericCollection.cdc"
-	filenameAccountController = "AccountController.cdc"
+	filenameGenericCollection        = "GenericCollection.cdc"
+	filenameAccountController        = "AccountController.cdc"
+	filenameAccountControllerUpdated = "AccountControllerUpdated.cdc"
 
 	EmulatorFlowTokenAddress        = "0x0ae53cb6e3f42a79"
 	EmulatorFungibleTokenAddress    = "0xee82856bf20e2aa6"
@@ -44,6 +45,14 @@ func GenericCollection(nftAddr string) []byte {
 
 func AccountController(nftAddr, exampleTokenAddr string) []byte {
 	code := assets.MustAssetString(filenameAccountController)
+	code = placeHolderNonFungibleToken.ReplaceAllString(code, withHexPrefix(nftAddr))
+	code = placeHolderExampleToken.ReplaceAllString(code, withHexPrefix(exampleTokenAddr))
+
+	return []byte(code)
+}
+
+func AccountControllerUpdated(nftAddr, exampleTokenAddr string) []byte {
+	code := assets.MustAssetString(filenameAccountControllerUpdated)
 	code = placeHolderNonFungibleToken.ReplaceAllString(code, withHexPrefix(nftAddr))
 	code = placeHolderExampleToken.ReplaceAllString(code, withHexPrefix(exampleTokenAddr))
 
